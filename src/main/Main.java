@@ -69,6 +69,7 @@ public class Main {
             System.setProperty("java.library.path", ".\\lib\\OpenCV_3.3.1");
         }
         System.out.println("Library Path :" + System.getProperty("java.library.path"));
+        System.out.println(Core.NATIVE_LIBRARY_NAME + "-" + System.getProperty("os.arch")+"");
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME + "-" + System.getProperty("os.arch"));
 
         /* Create and display the form */
