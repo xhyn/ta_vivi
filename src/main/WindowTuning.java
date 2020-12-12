@@ -758,15 +758,46 @@ public class WindowTuning extends javax.swing.JFrame {
             //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
             double overlap_x = prev.x + (prev.width * overlap);
             double overlap_y = prev.y + (prev.height * overlap);
+            
+            Rect rect_Crop=null;
             if (rect[i].area() > (int) limit_area) {
                 if (rect[i].x >= (int)overlap_x || rect[i].y >= (int)overlap_y) {
                     //System.out.println("ovx :"+(int)overlap_x+" ovy :"+(int)overlap_y);
                     Imgproc.rectangle(dw, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
                     Imgproc.rectangle(oby, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
                     System.out.println("kontur :" + i + " , x :" + rect[i].x + " , y :" + rect[i].y + " area :" + rect[i].area());
-                    //crop
                     
-                    //print obyek
+                    //crop
+                    //Proses Crop
+                    rect_Crop = new Rect(rect[i].x, rect[i].y, rect[i].width, rect[i].height);
+                    Mat image_roi = new Mat(dw,rect_Crop);
+                    //Akhir Proses Crop
+                    
+                    //remove .jpg
+                    String file_name = fc.getSelectedFile().getName();
+                    String to_remove=".jpg";
+                    String folder_name = file_name.replace(to_remove, "");
+                    //Akhir remove .jpg
+                    
+                    // Path menyimpan Hasil Output 
+                    String path = "C:\\Users\\Asus\\Dropbox\\"
+                            + "My PC (LAPTOP-C0I513GR)\\Documents\\"
+                            + "GitHub\\ta_vivi\\output\\";
+                    
+                    // Proses save to gray
+                    Mat abu=image_roi.clone();
+                    Imgproc.cvtColor(image_roi, abu, Imgproc.COLOR_BGR2GRAY);
+                    Imgcodecs.imwrite(path+folder_name+" abu - "+i+".jpg", abu);
+                    
+                    // Process Resize
+                    Mat rz = new Mat();
+                    Size sz = new Size(28,28);
+                    Imgproc.resize(abu, rz, sz);
+                    Imgcodecs.imwrite(path+folder_name+" sz - "+i+".jpg", rz);
+                    
+                    // {Process Save to the HELL
+                    System.out.println(i);
+                    Imgcodecs.imwrite(path+folder_name+"-"+i+".jpg", image_roi);
                 }
             }
             prev=rect[i];
