@@ -8,6 +8,7 @@ package main;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
@@ -300,7 +301,7 @@ public class WindowTuning extends javax.swing.JFrame {
 
         jLabel3.setText("Overlap :");
 
-        fieldOverlap.setText("0");
+        fieldOverlap.setText("80");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -678,11 +679,33 @@ public class WindowTuning extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lbl_img_otherMouseClicked
 
+    public static String getBaseName(String fileName){
+        int index=fileName.lastIndexOf('.');
+        if (index<1){
+            return fileName;
+        } else{
+            return fileName.substring(0,index);
+        }
+    }
     private void find_contour() {
         dw = img_awal.clone();
-        Mat oby=img_awal.clone();
+        Mat oby = img_awal.clone();
         Core.bitwise_and(h, s, mask);
         Core.bitwise_and(mask, v, mask);
+
+        //remove extension
+        String file_name = getBaseName(fc.getSelectedFile().getName());
+        
+
+        // Path menyimpan Hasil Output                     
+        String path = System.getProperty("user.dir") + "\\output\\" + file_name + "\\";
+        System.out.println(path);
+        File f=new File(path);
+        if(!f.exists()&& !f.isDirectory()){
+            System.out.println("Direktori belum ada");
+            f.mkdirs();
+        }
+
         drawtoLabelScaled(mask, lbl_img_mask, scale);
 
         //Imgproc.blur(mask, blur, new Size(3,3));
@@ -692,116 +715,121 @@ public class WindowTuning extends javax.swing.JFrame {
         kontur.clear();
         Imgproc.findContours(canny, kontur, hirarki, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
         System.out.println("kontur ditemukan :" + kontur.size());
-        
+
         //sorting kontur berdasar x dan y
         Rect[] rect = new Rect[kontur.size()];
-        int[] temp_data=new int[kontur.size()];
+        int[] temp_data = new int[kontur.size()];
         for (int i = 0; i < kontur.size(); i++) {
             rect[i] = Imgproc.boundingRect(kontur.get(i));
-            temp_data[i]=Integer.parseInt(rect[i].x+""+rect[i].y);
+            temp_data[i] = Integer.parseInt(rect[i].x + "" + rect[i].y);
         }
-        
+
         //sort
-        int n=kontur.size();
-        for (int i = 0; i < n-1; i++)      
-            for (int j = 0; j < n-i-1; j++)
-                if(temp_data[j]>temp_data[j+1]){
+        int n = kontur.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (temp_data[j] > temp_data[j + 1]) {
                     //swap data
-                    int temp = temp_data[j]; 
-                    temp_data[j] = temp_data[j+1]; 
-                    temp_data[j+1] = temp; 
-                    
+                    int temp = temp_data[j];
+                    temp_data[j] = temp_data[j + 1];
+                    temp_data[j + 1] = temp;
+
                     //swap rect
-                    Rect temp2=rect[j];
-                  
-                    rect[j]=rect[j+1];
-                    rect[j+1]=temp2;
+                    Rect temp2 = rect[j];
+
+                    rect[j] = rect[j + 1];
+                    rect[j + 1] = temp2;
                 }
-        
+            }
+        }
+
         Mat drawing = Mat.zeros(canny.size(), CvType.CV_8UC3);
 
-        
         int pic_area = img_awal.width() * img_awal.height();
         double limit_area = (Integer.parseInt(fieldArea.getText()) / 1000.0) * pic_area;
         System.out.println("limit area :" + limit_area + ", pic area : " + pic_area);
 
         double overlap = (Integer.parseInt(fieldOverlap.getText())) / 100.0;
-        System.out.println("overlap :"+overlap);
+        System.out.println("overlap :" + overlap);
         Rect prev = new Rect();
-        
+
         Scalar color = new Scalar(0, 255, 0);
         // kontur pertama
-        
+
         //System.out.println("Kontur "+i+" : "+rect.br()+" , "+rect.);
         //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
-
+        
+        // indek untuk kontur yang ditemukan
+        // untuk penomoran file
+        int idx=0;
+        
         if (rect[0].area() > (int) limit_area) {
             //rect.
             Imgproc.rectangle(dw, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
             Imgproc.rectangle(oby, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
             System.out.println("kontur :" + 0 + " , x :" + rect[0].x + " , y :" + rect[0].y + " area :" + rect[0].area());
             
+
             //crop
             
             //print
             
+            idx++;
         }
         prev = rect[0];
 
         //kontur kedua dst
         for (int i = 1; i < rect.length; i++) {
-            
-            oby=img_awal.clone();
+
+            //oby = img_awal.clone();
             //Imgproc.drawContours(dw, kontur, i, color, 2, Core.LINE_8, hirarki, 0, new Point());
             //if(kontur.get(i).height()<(dw.height()/10)&&kontur.get(i).width()<(dw.width()/10))
             //System.out.println("Kontur "+i+" : "+rect.br()+" , "+rect.);
             //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
             double overlap_x = prev.x + (prev.width * overlap);
             double overlap_y = prev.y + (prev.height * overlap);
-            
-            Rect rect_Crop=null;
+
+            Rect rect_Crop = null;
             if (rect[i].area() > (int) limit_area) {
-                if (rect[i].x >= (int)overlap_x || rect[i].y >= (int)overlap_y) {
+                if (rect[i].x >= (int) overlap_x || rect[i].y >= (int) overlap_y) {
+                    
+                    
                     //System.out.println("ovx :"+(int)overlap_x+" ovy :"+(int)overlap_y);
                     Imgproc.rectangle(dw, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
                     Imgproc.rectangle(oby, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
                     System.out.println("kontur :" + i + " , x :" + rect[i].x + " , y :" + rect[i].y + " area :" + rect[i].area());
-                    
+
                     //crop
                     //Proses Crop
                     rect_Crop = new Rect(rect[i].x, rect[i].y, rect[i].width, rect[i].height);
-                    Mat image_roi = new Mat(dw,rect_Crop);
+                    Mat image_roi = new Mat(img_awal, rect_Crop);
                     //Akhir Proses Crop
-                    
-                    //remove .jpg
-                    String file_name = fc.getSelectedFile().getName();
-                    String to_remove=".jpg";
-                    String folder_name = file_name.replace(to_remove, "");
-                    //Akhir remove .jpg
-                    
-                    // Path menyimpan Hasil Output                     
-                    String path = System.getProperty("user.dir")+"\\output\\";
-                    System.out.println(path);
-                    
+
                     // Proses save to gray
-                    Mat abu=image_roi.clone();
+                    Mat abu = image_roi.clone();
                     Imgproc.cvtColor(image_roi, abu, Imgproc.COLOR_BGR2GRAY);
-                    Imgcodecs.imwrite(path+folder_name+" abu - "+i+".jpg", abu);
                     
+                    //untuk mengetes apakah gambar bisa di write
+                    if(!Imgcodecs.imwrite(path + "crop_abu-" + idx + ".jpg", abu))
+                        System.out.println("failed to write file");
+                        
+
                     // Process Resize
                     Mat rz = new Mat();
-                    Size sz = new Size(28,28);
+                    Size sz = new Size(28, 28);
                     Imgproc.resize(abu, rz, sz);
-                    Imgcodecs.imwrite(path+folder_name+" sz - "+i+".jpg", rz);
-                    
+                    Imgcodecs.imwrite(path + "crop_abu_rz-" + idx + ".jpg", rz);
+
                     // {Process Save to the HELL
                     System.out.println(i);
-                    Imgcodecs.imwrite(path+folder_name+"-"+i+".jpg", image_roi);
+                    Imgcodecs.imwrite(path + "crop-" + idx + ".jpg", image_roi);
+                    
+                    idx++;
                 }
             }
-            prev=rect[i];
+            prev = rect[i];
         }
-        Imgcodecs.imwrite("out-xx.jpg", dw);
+        Imgcodecs.imwrite(path +"processed.jpg", dw);
         drawtoLabelScaled(dw, lbl_img_other, scale);
         x.drawtoLabelScaled(dw);
     }
