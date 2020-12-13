@@ -779,10 +779,9 @@ public class WindowTuning extends javax.swing.JFrame {
                     String folder_name = file_name.replace(to_remove, "");
                     //Akhir remove .jpg
                     
-                    // Path menyimpan Hasil Output 
-                    String path = "C:\\Users\\Asus\\Dropbox\\"
-                            + "My PC (LAPTOP-C0I513GR)\\Documents\\"
-                            + "GitHub\\ta_vivi\\output\\";
+                    // Path menyimpan Hasil Output                     
+                    String path = System.getProperty("user.dir")+"\\output\\";
+                    System.out.println(path);
                     
                     // Proses save to gray
                     Mat abu=image_roi.clone();
