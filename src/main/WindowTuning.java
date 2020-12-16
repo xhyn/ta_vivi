@@ -806,19 +806,19 @@ public class WindowTuning extends javax.swing.JFrame {
                     //Akhir Proses Crop
 
                     // Proses save to gray
-                    Mat abu = image_roi.clone();
-                    Imgproc.cvtColor(image_roi, abu, Imgproc.COLOR_BGR2GRAY);
+                    Mat gray = image_roi.clone();
+                    Imgproc.cvtColor(image_roi, gray, Imgproc.COLOR_BGR2GRAY);
                     
                     //untuk mengetes apakah gambar bisa di write
-                    if(!Imgcodecs.imwrite(path + "crop_abu-" + idx + ".jpg", abu))
+                    if(!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray))
                         System.out.println("failed to write file");
                         
 
                     // Process Resize
                     Mat rz = new Mat();
                     Size sz = new Size(28, 28);
-                    Imgproc.resize(abu, rz, sz);
-                    Imgcodecs.imwrite(path + "crop_abu_rz-" + idx + ".jpg", rz);
+                    Imgproc.resize(gray, rz, sz);
+                    Imgcodecs.imwrite(path + "crop_gray_rz-" + idx + ".jpg", rz);
 
                     // {Process Save to the HELL
                     System.out.println(i);
