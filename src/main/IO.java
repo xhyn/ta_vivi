@@ -57,6 +57,8 @@ public class IO {
             x[i].vh = Integer.parseInt(scanner.next());
             x[i].type = scanner.next();
             x[i].limit_area = Integer.parseInt(scanner.next());
+            x[i].component = Integer.parseInt(scanner.next());
+            x[i].componentValue = scanner.next();
             /*setelah selesai membaca semua konten, iterasi nilai i untuk menguah 
              indeks array arr untuk pe,bacaan konten pada baris berikutnya*/
             i++;
@@ -87,7 +89,7 @@ public class IO {
                 } else {
                     bufferFileWriter.append(x[i].file_name + "," + x[i].hl + ","
                             + x[i].hh + "," + x[i].sl + "," + x[i].sh + ","
-                            + x[i].vl + "," + x[i].vh + "," + x[i].type +"," + x[i].limit_area+ "\r\n");
+                            + x[i].vl + "," + x[i].vh + "," + x[i].type +"," + x[i].limit_area+","+x[i].component+","+x[i].componentValue+ "\r\n");
                 }
             }
             //setelah selesai proses, file ditutup

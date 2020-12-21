@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -30,6 +31,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 /**
  *
@@ -44,7 +46,8 @@ public class WindowTuning extends javax.swing.JFrame {
     boolean opened = false;
     double scale;
     Gambar data_image[], xx;
-
+    int component, image_index;
+    String val;
     Extend x;
 
     /**
@@ -80,6 +83,12 @@ public class WindowTuning extends javax.swing.JFrame {
             IO.tulis_baru();
         }
         data_image = parser.ret();
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
+        for (int i = 0; i < data_image.length; i++) {
+            listModel.addElement(data_image[i].file_name);
+        }
+        listImage.setModel(listModel);
         //x =new Extend();
         // x.setVisible(false);
     }
@@ -93,6 +102,8 @@ public class WindowTuning extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         btn_open = new javax.swing.JButton();
         lbl_img_src = new javax.swing.JLabel();
         lbl_img_h = new javax.swing.JLabel();
@@ -124,6 +135,19 @@ public class WindowTuning extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         fieldOverlap = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listImage = new javax.swing.JList<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listObject = new javax.swing.JList<>();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        label_dataset_image = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        label_dataset_component = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("program");
@@ -303,142 +327,139 @@ public class WindowTuning extends javax.swing.JFrame {
 
         fieldOverlap.setText("80");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(combo_type, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lbl_img_src, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                        .addComponent(btn_thres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(label_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_open, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(combo_type, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(slider_h1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbl_h1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(178, 178, 178)
+                        .addComponent(lbl_s1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lbl_img_src, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                            .addComponent(btn_open, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_thres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(slider_h1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_img_h_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lbl_img_s_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lbl_h1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(slider_s1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lbl_s1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(slider_v1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lbl_img_h_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lbl_img_s_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lbl_img_v_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_img_h, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(slider_h, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lbl_img_v_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(lbl_img_h, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lbl_img_s, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(slider_h, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lbl_h_val, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(slider_s, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lbl_s_val, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(lbl_img_v, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(slider_v, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(lbl_v1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(lbl_v_val, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addContainerGap(36, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lbl_img_mask, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(fieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3)
-                                    .addComponent(fieldOverlap, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(107, 107, 107)
-                                .addComponent(lbl_img_other, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                        .addComponent(lbl_h_val, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(slider_s, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lbl_s_val, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lbl_img_s, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(slider_s1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lbl_img_v, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(slider_v, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(slider_v1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbl_v1_val, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lbl_v_val, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addContainerGap(148, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_img_mask, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(fieldOverlap, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(107, 107, 107)
+                        .addComponent(lbl_img_other, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lbl_img_h, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_img_s, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_img_v, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_img_src, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(lbl_h_val)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(slider_v, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(slider_s, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lbl_s_val, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addComponent(lbl_v_val))
                             .addComponent(slider_h, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(btn_open)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_h1_val)
-                            .addComponent(jLabel2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(lbl_s1_val))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(lbl_v1_val))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(slider_s1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(slider_h1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(slider_v1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_name))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(combo_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_img_h_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_img_s_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_img_v_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_save))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(lbl_h1_val)
+                                            .addComponent(jLabel2)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(slider_s1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(4, 4, 4)
+                                        .addComponent(lbl_s1_val))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(lbl_v1_val)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(combo_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(slider_v1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_img_h_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_img_s_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_img_v_thres, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_save)))
+                    .addComponent(slider_h1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_name))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_thres)
                         .addGap(125, 125, 125))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(4, 4, 4)
                                 .addComponent(fieldArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -448,7 +469,129 @@ public class WindowTuning extends javax.swing.JFrame {
                                 .addComponent(fieldOverlap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lbl_img_mask, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_img_other, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(24, Short.MAX_VALUE))))
+                        .addContainerGap(30, Short.MAX_VALUE))))
+        );
+
+        jTabbedPane1.addTab("Segmentation", jPanel1);
+
+        listImage.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listImage.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listImageValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listImage);
+
+        jLabel4.setText("Image");
+
+        jLabel5.setText("Detected Object");
+
+        listObject.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listObject.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listObjectValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(listObject);
+
+        jLabel6.setText("Moment Value : ");
+
+        jLabel7.setText("0");
+
+        jLabel8.setText("Image");
+
+        jLabel10.setText("Object");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(100, 100, 100)
+                        .addComponent(jLabel5))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(190, 190, 190)
+                        .addComponent(jLabel10))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(354, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(293, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Dataset", jPanel2);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1075, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 629, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -458,7 +601,8 @@ public class WindowTuning extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             double h_scale, w_scale;
-            String file_name = fc.getSelectedFile().getName();
+            String file_name = getBaseName(fc.getSelectedFile().getName());
+            System.out.println("Opened Image : " + fc.getSelectedFile().getPath());
             img_awal = Imgcodecs.imread(fc.getSelectedFile().getPath(), Imgcodecs.IMREAD_COLOR);
 
             img_hsv = new Mat();
@@ -494,7 +638,7 @@ public class WindowTuning extends javax.swing.JFrame {
 
             opened = true;
 
-            label_name.setText("File Name : " + fc.getSelectedFile().getName());
+            label_name.setText(getBaseName("File Name : " + fc.getSelectedFile().getName()));
             int i = 0;
             while (i < data_image.length) {
                 if (file_name.equals(data_image[i].file_name)) {
@@ -506,6 +650,8 @@ public class WindowTuning extends javax.swing.JFrame {
                     slider_v.setValue(data_image[i].vl);
                     slider_v1.setValue(data_image[i].vh);
                     fieldArea.setText(data_image[i].limit_area + "");
+                    component = data_image[i].component;
+                    val=data_image[i].componentValue;
                     thres_h();
                     thres_s();
                     thres_v();
@@ -526,6 +672,24 @@ public class WindowTuning extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_openActionPerformed
 
+    private void refreshDir(String path){
+        File f = new File(path);
+        if (!f.exists() && !f.isDirectory()) {
+            System.out.println("Direktori belum ada, membuat baru");
+            f.mkdirs();
+        }else{
+            File[] files = f.listFiles();
+
+            // delete each file from the directory
+            System.out.println("Direktori sudah ada, menghapus semua isi");
+            for (File file : files) {
+                System.out.println(file + " deleted.");
+                file.delete();
+            }
+            f.delete();
+            f.mkdirs();
+        }
+    }
     private void thres_h() {
         lbl_h_val.setText("" + slider_h.getValue());
         lbl_h1_val.setText("" + slider_h1.getValue());
@@ -631,7 +795,10 @@ public class WindowTuning extends javax.swing.JFrame {
             int i = 0;
             int x = 0;
             boolean notFound = true;
-            String file_name = fc.getSelectedFile().getName();
+            String file_name = getBaseName(fc.getSelectedFile().getName());
+            String path = System.getProperty("user.dir") + "\\output\\" + file_name + "\\";
+            System.out.println("data path: " + path);
+            //refreshDir(path);
             while (i < data_image.length) {
                 if (file_name.equals(data_image[i].file_name)) {
                     data_image[i].hl = slider_h.getValue();
@@ -642,6 +809,8 @@ public class WindowTuning extends javax.swing.JFrame {
                     data_image[i].vh = slider_v1.getValue();
                     data_image[i].type = combo_type.getSelectedItem() + "";
                     data_image[i].limit_area = Integer.parseInt(fieldArea.getText());
+                    data_image[i].component = component;
+                    data_image[i].componentValue=val;
                     notFound = false;
                     break;
                 } else {
@@ -661,6 +830,8 @@ public class WindowTuning extends javax.swing.JFrame {
                 data_image[x].vh = slider_v1.getValue();
                 data_image[x].type = combo_type.getSelectedItem() + "";
                 data_image[x].limit_area = Integer.parseInt(fieldArea.getText());
+                data_image[x].component = component;
+                data_image[x].componentValue=val;
             }
             try {
                 IO.tulis_database(data_image);
@@ -675,19 +846,54 @@ public class WindowTuning extends javax.swing.JFrame {
         if (opened) {
             x.setVisible(true);
             x.drawtoLabelScaled(dw);
+
         }
 
     }//GEN-LAST:event_lbl_img_otherMouseClicked
 
-    public static String getBaseName(String fileName){
-        int index=fileName.lastIndexOf('.');
-        if (index<1){
+    private void listImageValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listImageValueChanged
+        // TODO add your handling code here:
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
+        image_index = listImage.getSelectedIndex();
+        String path = System.getProperty("user.dir") + "\\output\\" + data_image[image_index].file_name + "\\processed.jpg";
+        System.out.println("Selected Image Path :" + path);
+        System.out.println("Scale: " + scale);
+        Mat display = new Mat();
+        display = Imgcodecs.imread(path, Imgcodecs.IMREAD_COLOR);
+        drawtoLabelScaled(display, label_dataset_image, scale);
+        System.out.println("Selected list index 0" + image_index);
+        for (int i = 0; i < data_image[image_index].component; i++) {
+            listModel.addElement(i);
+        }
+        listObject.setModel(listModel);
+        listObject.clearSelection();
+    }//GEN-LAST:event_listImageValueChanged
+
+    private void listObjectValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listObjectValueChanged
+        // TODO add your handling code here:
+        int index = listObject.getSelectedIndex();
+        if (index > -1) {
+            String path = System.getProperty("user.dir") + "\\output\\" + data_image[image_index].file_name + "\\crop-" + index + ".jpg";
+            System.out.println("Selected Image Path :" + path);
+            System.out.println("Scale: " + scale);
+            Mat display = new Mat();
+            display = Imgcodecs.imread(path, Imgcodecs.IMREAD_COLOR);
+            drawtoLabelScaled(display, label_dataset_component, scale);
+        }
+    }//GEN-LAST:event_listObjectValueChanged
+
+    public static String getBaseName(String fileName) {
+        int index = fileName.lastIndexOf('.');
+        if (index < 1) {
             return fileName;
-        } else{
-            return fileName.substring(0,index);
+        } else {
+            return fileName.substring(0, index);
         }
     }
+
     private void find_contour() {
+        component = 0;
         dw = img_awal.clone();
         Mat oby = img_awal.clone();
         Core.bitwise_and(h, s, mask);
@@ -695,16 +901,12 @@ public class WindowTuning extends javax.swing.JFrame {
 
         //remove extension
         String file_name = getBaseName(fc.getSelectedFile().getName());
-        
 
         // Path menyimpan Hasil Output                     
         String path = System.getProperty("user.dir") + "\\output\\" + file_name + "\\";
-        System.out.println(path);
-        File f=new File(path);
-        if(!f.exists()&& !f.isDirectory()){
-            System.out.println("Direktori belum ada");
-            f.mkdirs();
-        }
+        System.out.println("Output path: " + path);
+        refreshDir(path);
+        
 
         drawtoLabelScaled(mask, lbl_img_mask, scale);
 
@@ -743,7 +945,7 @@ public class WindowTuning extends javax.swing.JFrame {
             }
         }
 
-        Mat drawing = Mat.zeros(canny.size(), CvType.CV_8UC3);
+        //Mat drawing = Mat.zeros(canny.size(), CvType.CV_8UC3);
 
         int pic_area = img_awal.width() * img_awal.height();
         double limit_area = (Integer.parseInt(fieldArea.getText()) / 1000.0) * pic_area;
@@ -758,23 +960,61 @@ public class WindowTuning extends javax.swing.JFrame {
 
         //System.out.println("Kontur "+i+" : "+rect.br()+" , "+rect.);
         //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
-        
         // indek untuk kontur yang ditemukan
         // untuk penomoran file
-        int idx=0;
-        
+        int idx = 0;
+        val="";
+
         if (rect[0].area() > (int) limit_area) {
             //rect.
             Imgproc.rectangle(dw, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
             Imgproc.rectangle(oby, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
             System.out.println("kontur :" + 0 + " , x :" + rect[0].x + " , y :" + rect[0].y + " area :" + rect[0].area());
-            
 
             //crop
-            
             //print
-            
+            //Proses Crop
+            Rect Crop0 = null;
+                    Crop0 = new Rect(rect[0].x, rect[0].y, rect[0].width, rect[0].height);
+                    Mat image_roi = new Mat(oby, Crop0);
+                    //Akhir Proses Crop
+
+                    // Proses save to gray
+                    Mat gray0 = image_roi.clone();
+                    Imgproc.cvtColor(image_roi, gray0, Imgproc.COLOR_BGR2GRAY);
+                    
+                    //untuk mengetes apakah gambar bisa di write
+                    if(!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray0))
+                        System.out.println("failed to write file");
+                        
+
+                    // Process Resize
+                    Mat rz0 = new Mat();
+                    Size sz0 = new Size(28, 28);
+                    Imgproc.resize(gray0, rz0, sz0);
+                    Imgcodecs.imwrite(path + "crop_gray_rz-" + idx + ".jpg", rz0);
+
+                    // {Process Save to the HELL
+                    //System.out.println(idx);
+                    Imgcodecs.imwrite(path + "crop-" + idx + ".jpg", image_roi);
+                    
+                    // Proses Blur
+                    Mat blur0 = new Mat();
+                    Imgproc.blur(rz0, blur0, new Size(3, 3));
+                    
+                    // Proses Canny
+                    Mat canny0 = new Mat();
+                    int tresh0 = 128;
+                    Imgproc.Canny(blur0, canny0, tresh0, tresh0*2);
+                    
+                    Moments moments0 = new Moments();
+                    moments0 = Imgproc.moments(canny0);
+                    
+                    
             idx++;
+            System.out.println("Moment " + idx + " : = " + moments0.m00);
+            val=val+(int)moments0.m00+"/";
+
         }
         prev = rect[0];
 
@@ -792,8 +1032,7 @@ public class WindowTuning extends javax.swing.JFrame {
             Rect rect_Crop = null;
             if (rect[i].area() > (int) limit_area) {
                 if (rect[i].x >= (int) overlap_x || rect[i].y >= (int) overlap_y) {
-                    
-                    
+
                     //System.out.println("ovx :"+(int)overlap_x+" ovy :"+(int)overlap_y);
                     Imgproc.rectangle(dw, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
                     Imgproc.rectangle(oby, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
@@ -808,11 +1047,11 @@ public class WindowTuning extends javax.swing.JFrame {
                     // Proses save to gray
                     Mat gray = image_roi.clone();
                     Imgproc.cvtColor(image_roi, gray, Imgproc.COLOR_BGR2GRAY);
-                    
+
                     //untuk mengetes apakah gambar bisa di write
-                    if(!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray))
+                    if (!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray)) {
                         System.out.println("failed to write file");
-                        
+                    }
 
                     // Process Resize
                     Mat rz = new Mat();
@@ -821,15 +1060,34 @@ public class WindowTuning extends javax.swing.JFrame {
                     Imgcodecs.imwrite(path + "crop_gray_rz-" + idx + ".jpg", rz);
 
                     // {Process Save to the HELL
-                    System.out.println(i);
+                    
                     Imgcodecs.imwrite(path + "crop-" + idx + ".jpg", image_roi);
+
+                    // Proses Blur
+                    Mat blur = new Mat();
+                    Imgproc.blur(rz, blur, new Size(3, 3));
+                    
+                    // Proses Canny
+                    Mat canny = new Mat();
+                    int tresh = 128;
+                    Imgproc.Canny(blur, canny, tresh, tresh*2);
+                    
+                    Moments moments = new Moments();
+                    moments = Imgproc.moments(canny);
+                    
+                    
                     
                     idx++;
+                    System.out.println(idx);
+                    System.out.println("Moment " + idx + " : = " + moments.m00);
+                    val=val+(int)moments.m00+"/";
                 }
+                 prev = rect[i];
             }
-            prev = rect[i];
         }
-        Imgcodecs.imwrite(path +"processed.jpg", dw);
+        val=val.substring(0, val.length()-1);
+        component = idx;
+        Imgcodecs.imwrite(path + "processed.jpg", dw);
         drawtoLabelScaled(dw, lbl_img_other, scale);
         x.drawtoLabelScaled(dw);
     }
@@ -858,6 +1116,7 @@ public class WindowTuning extends javax.swing.JFrame {
 
     private void drawtoLabelScaled(Mat image, JLabel label, double scale) {
         Mat imshow = image.clone();
+
         Imgproc.resize(imshow, imshow, new Size(0, 0), scale, scale, Imgproc.INTER_LINEAR);
         drawtoLabel(imshow, label);
     }
@@ -885,8 +1144,21 @@ public class WindowTuning extends javax.swing.JFrame {
     private javax.swing.JTextField fieldArea;
     private javax.swing.JTextField fieldOverlap;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel label_dataset_component;
+    private javax.swing.JLabel label_dataset_image;
     private javax.swing.JLabel label_name;
     private javax.swing.JLabel lbl_h1_val;
     private javax.swing.JLabel lbl_h_val;
@@ -903,6 +1175,8 @@ public class WindowTuning extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_s_val;
     private javax.swing.JLabel lbl_v1_val;
     private javax.swing.JLabel lbl_v_val;
+    private javax.swing.JList<String> listImage;
+    private javax.swing.JList<String> listObject;
     private javax.swing.JSlider slider_h;
     private javax.swing.JSlider slider_h1;
     private javax.swing.JSlider slider_s;
