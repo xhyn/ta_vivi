@@ -20,21 +20,6 @@ public class Gambar {
         type = "";
 
     }
-    
-    public Gambar(String fileName,int comp, int h1,int h2,int s1,int s2,int v1, int v2,int limitArea, String compVal, String typ) {
-        file_name = fileName;
-        component = comp;
-        hl = h1;
-        hh = h2;
-        sl = s1;
-        sh = s2;
-        vl = v1;
-        vh = v2;
-        limit_area=limitArea;
-        componentValue=compVal;
-        type = typ;
-
-    }
 
     public static void isikosong(Gambar gambar) {
         /*

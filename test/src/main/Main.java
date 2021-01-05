@@ -76,8 +76,8 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
  
-                    //new WindowTuning().setVisible(true);
-                    new MainWindow().setVisible(true);
+                    new WindowTuning().setVisible(true);
+                    //new MainWindow().setVisible(true);
 
             }
         });

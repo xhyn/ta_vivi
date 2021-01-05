@@ -5,33 +5,17 @@
  */
 package main;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Moments;
 
 /**
  *
@@ -41,10 +25,11 @@ public class WindowTuning extends javax.swing.JFrame {
 
     JFileChooser fc;
     Mat img_awal, img_hsv, h, s, v, mask, blur, canny, hirarki, dw;
-    ArrayList<Mat> hsv, hsv_thres;
+    ArrayList<Mat> hsv, hsv_thres,data;
     List<MatOfPoint> kontur;
     boolean opened = false;
     double scale;
+    ArrayList<Gambar>dataImage;
     Gambar data_image[], xx;
     int component, image_index;
     String val;
@@ -64,9 +49,11 @@ public class WindowTuning extends javax.swing.JFrame {
         blur = new Mat();
         canny = new Mat();
         hirarki = new Mat();
-        hsv_thres = new ArrayList<Mat>();
-        hsv = new ArrayList<Mat>();
         kontur = new ArrayList<>();
+        hsv=new ArrayList<>();
+        hsv_thres=new ArrayList<>();
+        data=new ArrayList<>();
+        dataImage=new ArrayList<>();
         fc = new JFileChooser(System.getProperty("user.dir"));
         x = new Extend();
 
@@ -83,9 +70,11 @@ public class WindowTuning extends javax.swing.JFrame {
             IO.tulis_baru();
         }
         data_image = parser.ret();
+        
         DefaultListModel listModel;
         listModel = new DefaultListModel();
         for (int i = 0; i < data_image.length; i++) {
+            dataImage.add(data_image[i]);
             listModel.addElement(data_image[i].file_name);
         }
         listImage.setModel(listModel);
@@ -103,6 +92,19 @@ public class WindowTuning extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listImage = new javax.swing.JList<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listObject = new javax.swing.JList<>();
+        jLabel6 = new javax.swing.JLabel();
+        labelMomentVal = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        label_dataset_image = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        label_dataset_component = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btn_open = new javax.swing.JButton();
         lbl_img_src = new javax.swing.JLabel();
@@ -135,22 +137,102 @@ public class WindowTuning extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         fieldOverlap = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listImage = new javax.swing.JList<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listObject = new javax.swing.JList<>();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        label_dataset_image = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        label_dataset_component = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("program");
+
+        listImage.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listImage.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listImageValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listImage);
+
+        jLabel4.setText("Image");
+
+        jLabel5.setText("Detected Object");
+
+        listObject.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listObjectValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(listObject);
+
+        jLabel6.setText("Moment Value : ");
+
+        labelMomentVal.setText("0");
+
+        jLabel8.setText("Image");
+
+        jLabel10.setText("Object");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(100, 100, 100)
+                        .addComponent(jLabel5))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelMomentVal, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(190, 190, 190)
+                        .addComponent(jLabel10))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(354, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(labelMomentVal))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(293, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Dataset", jPanel2);
 
         btn_open.setText("OPEN");
         btn_open.addActionListener(new java.awt.event.ActionListener() {
@@ -336,12 +418,13 @@ public class WindowTuning extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lbl_img_src, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                        .addComponent(btn_thres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(label_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_open, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(combo_type, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btn_thres, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_save, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -474,124 +557,21 @@ public class WindowTuning extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Segmentation", jPanel1);
 
-        listImage.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        listImage.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listImageValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(listImage);
-
-        jLabel4.setText("Image");
-
-        jLabel5.setText("Detected Object");
-
-        listObject.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        listObject.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listObjectValueChanged(evt);
-            }
-        });
-        jScrollPane2.setViewportView(listObject);
-
-        jLabel6.setText("Moment Value : ");
-
-        jLabel7.setText("0");
-
-        jLabel8.setText("Image");
-
-        jLabel10.setText("Object");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(100, 100, 100)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(190, 190, 190)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(354, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(label_dataset_image, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label_dataset_component, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(293, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Dataset", jPanel2);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1075, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 629, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -600,8 +580,7 @@ public class WindowTuning extends javax.swing.JFrame {
     private void btn_openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openActionPerformed
         // TODO add your handling code here:
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            double h_scale, w_scale;
-            String file_name = getBaseName(fc.getSelectedFile().getName());
+            String file_name = Process.getBaseName(fc.getSelectedFile().getName());
             System.out.println("Opened Image : " + fc.getSelectedFile().getPath());
             img_awal = Imgcodecs.imread(fc.getSelectedFile().getPath(), Imgcodecs.IMREAD_COLOR);
 
@@ -611,52 +590,40 @@ public class WindowTuning extends javax.swing.JFrame {
             Core.split(img_hsv, hsv);
 
             System.out.println("HSV channel : " + hsv.size());
-
             System.out.println("panel height= " + lbl_img_src.getHeight());
             System.out.println("image height= " + img_awal.size().height);
 
-            //scale = 128/ (img_awal.size().height);
-            h_scale = (lbl_img_src.getHeight()) / (img_awal.size().height);
-            w_scale = (lbl_img_src.getWidth()) / (img_awal.size().width);
+            Draw.drawToLabelScaled(img_awal, lbl_img_src);
 
-            if (h_scale <= w_scale) {
-                scale = h_scale;
-            } else {
-                scale = w_scale;
-            }
-            System.out.println("scale asli = " + scale);
-
-            if (scale > 1) {
-                scale = 1.0;
-            }
-            System.out.println("scale normalisasi = " + scale);
-            drawtoLabelScaled(img_awal, lbl_img_src, scale);
-
-            drawtoLabelScaled(hsv.get(0), lbl_img_h, scale);
-            drawtoLabelScaled(hsv.get(1), lbl_img_s, scale);
-            drawtoLabelScaled(hsv.get(2), lbl_img_v, scale);
+            Draw.drawToLabelScaled(hsv.get(0), lbl_img_h);
+            Draw.drawToLabelScaled(hsv.get(1), lbl_img_s);
+            Draw.drawToLabelScaled(hsv.get(2), lbl_img_v);
 
             opened = true;
 
-            label_name.setText(getBaseName("File Name : " + fc.getSelectedFile().getName()));
+            label_name.setText(Process.getBaseName("File Name : " + fc.getSelectedFile().getName()));
             int i = 0;
-            while (i < data_image.length) {
-                if (file_name.equals(data_image[i].file_name)) {
+           
+            while (i < dataImage.size()) {
+                if (file_name.equals(dataImage.get(i).file_name)) {
 
-                    slider_h.setValue(data_image[i].hl);
-                    slider_h1.setValue(data_image[i].hh);
-                    slider_s.setValue(data_image[i].sl);
-                    slider_s1.setValue(data_image[i].sh);
-                    slider_v.setValue(data_image[i].vl);
-                    slider_v1.setValue(data_image[i].vh);
-                    fieldArea.setText(data_image[i].limit_area + "");
-                    component = data_image[i].component;
-                    val=data_image[i].componentValue;
-                    thres_h();
-                    thres_s();
-                    thres_v();
-                    find_contour();
-                    if (data_image[i].type.equals("AML")) {
+                    slider_h.setValue(dataImage.get(i).hl);
+                    slider_h1.setValue(dataImage.get(i).hh);
+                    slider_s.setValue(dataImage.get(i).sl);
+                    slider_s1.setValue(dataImage.get(i).sh);
+                    slider_v.setValue(dataImage.get(i).vl);
+                    slider_v1.setValue(dataImage.get(i).vh);
+                    fieldArea.setText(dataImage.get(i).limit_area + "");
+                    component = dataImage.get(i).component;
+                    val = dataImage.get(i).componentValue;
+
+                    h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
+                    s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
+                    v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
+
+                    thres();
+                    //find_contour();
+                    if (dataImage.get(i).type.equals("AML")) {
                         combo_type.setSelectedIndex(1);
                     } else {
                         combo_type.setSelectedIndex(0);
@@ -667,126 +634,136 @@ public class WindowTuning extends javax.swing.JFrame {
                     i++;
                 }
             }
+            if(i==dataImage.size()){
+                slider_h.setValue(0);
+                    slider_h1.setValue(180);
+                    slider_s.setValue(0);
+                    slider_s1.setValue(255);
+                    slider_v.setValue(0);
+                    slider_v1.setValue(255);
+                    fieldArea.setText(10+ "");
+                    component = 0;
+                    val = "";
+
+                    h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
+                    s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
+                    v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
+
+                    thres();
+            }
 
             //drawtoLabel(img_awal, pnl_open);
         }
     }//GEN-LAST:event_btn_openActionPerformed
 
-    private void refreshDir(String path){
+    private void refreshDir(String path) {
         File f = new File(path);
         if (!f.exists() && !f.isDirectory()) {
             System.out.println("Direktori belum ada, membuat baru");
             f.mkdirs();
-        }else{
+        } else {
             File[] files = f.listFiles();
 
             // delete each file from the directory
-            System.out.println("Direktori sudah ada, menghapus semua isi");
+            System.out.println("Direktori sudah ada, refresh semua isi");
             for (File file : files) {
                 System.out.println(file + " deleted.");
                 file.delete();
             }
-            f.delete();
-            f.mkdirs();
         }
     }
-    private void thres_h() {
-        lbl_h_val.setText("" + slider_h.getValue());
-        lbl_h1_val.setText("" + slider_h1.getValue());
-        if (opened) {
-            //Imgproc.threshold(hsv.get(0), h, slider_h.getValue(), slider_h1.getValue(), Imgproc.THRESH_TRUNC);
-            Core.inRange(img_hsv, new Scalar(slider_h.getValue(), 0, 0),
-                    new Scalar(slider_h1.getValue(), 255, 255), h);
-            drawtoLabelScaled(h, lbl_img_h_thres, scale);
-        }
-    }
+    
+    private void thres(){
+        mask=Process.getMask(h, s, v);
+        Draw.drawToLabelScaled(mask, lbl_img_mask);
+        
+        int pic_area = img_awal.width() * img_awal.height();
+        double limit_area = (Integer.parseInt(fieldArea.getText()) / 1000.0) * pic_area;
+        System.out.println("limit area :" + limit_area + ", pic area : " + pic_area);
 
-    private void thres_s() {
-        lbl_s_val.setText("" + slider_s.getValue());
-        lbl_s1_val.setText("" + slider_s1.getValue());
-        if (opened) {
-            //Imgproc.threshold(hsv.get(0), h, slider_h.getValue(), slider_h1.getValue(), Imgproc.THRESH_TRUNC);
-            Core.inRange(img_hsv, new Scalar(0, slider_s.getValue(), 0),
-                    new Scalar(180, slider_s1.getValue(), 255), s);
-            drawtoLabelScaled(s, lbl_img_s_thres, scale);
-        }
-    }
-
-    private void thres_v() {
-        lbl_v_val.setText("" + slider_v.getValue());
-        lbl_v1_val.setText("" + slider_v1.getValue());
-        if (opened) {
-            //Imgproc.threshold(hsv.get(0), h, slider_h.getValue(), slider_h1.getValue(), Imgproc.THRESH_TRUNC);
-            Core.inRange(img_hsv, new Scalar(0, 0, slider_v.getValue()),
-                    new Scalar(180, 255, slider_v1.getValue()), v);
-            drawtoLabelScaled(v, lbl_img_v_thres, scale);
-        }
+        double overlap = (Integer.parseInt(fieldOverlap.getText())) / 100.0;
+        System.out.println("overlap :" + overlap);
+        
+        data=Process.cropROI(Process.findROI( mask,limit_area, overlap),img_awal);
+        
+        Draw.drawToLabelScaled(data.get(data.size()-1),lbl_img_other );
+        x.drawToLabelScaled(data.get(data.size()-1));
     }
 
     private void slider_hMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_hMouseReleased
         // TODO add your handling code here:
-        thres_h();
+        if (opened)
+            h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
     }//GEN-LAST:event_slider_hMouseReleased
 
     private void slider_hMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_hMouseDragged
         // TODO add your handling code here:
-        thres_h();
+        if (opened)
+            h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
     }//GEN-LAST:event_slider_hMouseDragged
 
     private void slider_sMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_sMouseReleased
         // TODO add your handling code here:
-        thres_s();
+        if (opened)
+            s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
     }//GEN-LAST:event_slider_sMouseReleased
 
     private void slider_sMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_sMouseDragged
         // TODO add your handling code here:
-        thres_s();
+        if (opened)
+            s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
     }//GEN-LAST:event_slider_sMouseDragged
 
     private void slider_vMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_vMouseDragged
         // TODO add your handling code here:
-        thres_v();
+        if (opened)
+            v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
     }//GEN-LAST:event_slider_vMouseDragged
 
     private void slider_vMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_vMouseReleased
         // TODO add your handling code here:
-        thres_v();
+        if (opened)
+            v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
     }//GEN-LAST:event_slider_vMouseReleased
 
     private void btn_thresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_thresActionPerformed
         // TODO add your handling code here:
-        find_contour();
-
+        if(opened)
+            thres();
     }//GEN-LAST:event_btn_thresActionPerformed
 
     private void slider_h1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_h1MouseDragged
         // TODO add your handling code here:
-        thres_h();
+        if (opened)
+            h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
     }//GEN-LAST:event_slider_h1MouseDragged
 
     private void slider_h1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_h1MouseReleased
         // TODO add your handling code here:
-        thres_h();
+        if (opened)
+            h = Process.hsvThres(lbl_h_val, lbl_h1_val, slider_h, slider_h1, img_hsv, lbl_img_h_thres,0);
     }//GEN-LAST:event_slider_h1MouseReleased
 
     private void slider_s1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_s1MouseDragged
         // TODO add your handling code here:
-        thres_s();
+        if (opened)
+            s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
     }//GEN-LAST:event_slider_s1MouseDragged
 
     private void slider_s1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_s1MouseReleased
         // TODO add your handling code here:
-        thres_s();
+        if (opened)
+            s = Process.hsvThres(lbl_s_val, lbl_s1_val, slider_s, slider_s1, img_hsv, lbl_img_s_thres,1);
     }//GEN-LAST:event_slider_s1MouseReleased
 
     private void slider_v1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_v1MouseDragged
         // TODO add your handling code here:
-        thres_v();
+        v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
     }//GEN-LAST:event_slider_v1MouseDragged
 
     private void slider_v1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_slider_v1MouseReleased
         // TODO add your handling code here:
-        thres_v();
+        v = Process.hsvThres(lbl_v_val, lbl_v1_val, slider_v, slider_v1, img_hsv, lbl_img_v_thres,2);
     }//GEN-LAST:event_slider_v1MouseReleased
 
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
@@ -795,49 +772,44 @@ public class WindowTuning extends javax.swing.JFrame {
             int i = 0;
             int x = 0;
             boolean notFound = true;
-            String file_name = getBaseName(fc.getSelectedFile().getName());
+            String file_name = Process.getBaseName(fc.getSelectedFile().getName());
             String path = System.getProperty("user.dir") + "\\output\\" + file_name + "\\";
             System.out.println("data path: " + path);
-            //refreshDir(path);
-            while (i < data_image.length) {
-                if (file_name.equals(data_image[i].file_name)) {
-                    data_image[i].hl = slider_h.getValue();
-                    data_image[i].hh = slider_h1.getValue();
-                    data_image[i].sl = slider_s.getValue();
-                    data_image[i].sh = slider_s1.getValue();
-                    data_image[i].vl = slider_v.getValue();
-                    data_image[i].vh = slider_v1.getValue();
-                    data_image[i].type = combo_type.getSelectedItem() + "";
-                    data_image[i].limit_area = Integer.parseInt(fieldArea.getText());
-                    data_image[i].component = component;
-                    data_image[i].componentValue=val;
+            refreshDir(path);
+            Process.saveImage(data, path);
+            val=Process.findMoment(data);
+            component=data.size()-1;
+            while (i < dataImage.size()) {
+                if (file_name.equals(dataImage.get(i).file_name)) {
+                    dataImage.get(i).hl = slider_h.getValue();
+                    dataImage.get(i).hh = slider_h1.getValue();
+                    dataImage.get(i).sl = slider_s.getValue();
+                    dataImage.get(i).sh = slider_s1.getValue();
+                    dataImage.get(i).vl = slider_v.getValue();
+                    dataImage.get(i).vh = slider_v1.getValue();
+                    dataImage.get(i).type = combo_type.getSelectedItem() + "";
+                    dataImage.get(i).limit_area = Integer.parseInt(fieldArea.getText());
+                    dataImage.get(i).component = component;
+                    dataImage.get(i).componentValue = val;
                     notFound = false;
                     break;
                 } else {
-                    if (data_image[i].file_name.equals("") && x == 0) {
-                        x = i;
-                    }
                     i++;
                 }
             }
             if (notFound) {
-                data_image[x].file_name = file_name;
-                data_image[x].hl = slider_h.getValue();
-                data_image[x].hh = slider_h1.getValue();
-                data_image[x].sl = slider_s.getValue();
-                data_image[x].sh = slider_s1.getValue();
-                data_image[x].vl = slider_v.getValue();
-                data_image[x].vh = slider_v1.getValue();
-                data_image[x].type = combo_type.getSelectedItem() + "";
-                data_image[x].limit_area = Integer.parseInt(fieldArea.getText());
-                data_image[x].component = component;
-                data_image[x].componentValue=val;
+                dataImage.add(new Gambar(file_name,slider_h.getValue(),slider_h1.getValue(),
+                            slider_s.getValue(),slider_s1.getValue(),slider_v.getValue(),
+                            slider_v1.getValue(),Integer.parseInt(fieldArea.getText()),
+                            component,val,combo_type.getSelectedItem() + ""));
+                    
             }
             try {
                 IO.tulis_database(data_image);
             } catch (IOException ex) {
                 IO.tulis_baru();
             }
+            
         }
     }//GEN-LAST:event_btn_saveActionPerformed
 
@@ -845,7 +817,7 @@ public class WindowTuning extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (opened) {
             x.setVisible(true);
-            x.drawtoLabelScaled(dw);
+            x.drawToLabelScaled(data.get(data.size()-1));
 
         }
 
@@ -861,9 +833,9 @@ public class WindowTuning extends javax.swing.JFrame {
         System.out.println("Scale: " + scale);
         Mat display = new Mat();
         display = Imgcodecs.imread(path, Imgcodecs.IMREAD_COLOR);
-        drawtoLabelScaled(display, label_dataset_image, scale);
+        Draw.drawToLabelScaled(display, label_dataset_image);
         System.out.println("Selected list index 0" + image_index);
-        for (int i = 0; i < data_image[image_index].component; i++) {
+        for (int i = 0; i < dataImage.get(image_index).component; i++) {
             listModel.addElement(i);
         }
         listObject.setModel(listModel);
@@ -874,266 +846,16 @@ public class WindowTuning extends javax.swing.JFrame {
         // TODO add your handling code here:
         int index = listObject.getSelectedIndex();
         if (index > -1) {
-            String path = System.getProperty("user.dir") + "\\output\\" + data_image[image_index].file_name + "\\crop-" + index + ".jpg";
+            String momentVal[]=dataImage.get(image_index).componentValue.split("/");
+            labelMomentVal.setText(momentVal[index]);
+            String path = System.getProperty("user.dir") + "\\output\\" + dataImage.get(image_index).file_name + "\\crop-" + index + ".jpg";
             System.out.println("Selected Image Path :" + path);
             System.out.println("Scale: " + scale);
             Mat display = new Mat();
             display = Imgcodecs.imread(path, Imgcodecs.IMREAD_COLOR);
-            drawtoLabelScaled(display, label_dataset_component, scale);
+            Draw.drawToLabelScaled(display, label_dataset_component);
         }
     }//GEN-LAST:event_listObjectValueChanged
-
-    public static String getBaseName(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index < 1) {
-            return fileName;
-        } else {
-            return fileName.substring(0, index);
-        }
-    }
-
-    private void find_contour() {
-        component = 0;
-        dw = img_awal.clone();
-        Mat oby = img_awal.clone();
-        Core.bitwise_and(h, s, mask);
-        Core.bitwise_and(mask, v, mask);
-
-        //remove extension
-        String file_name = getBaseName(fc.getSelectedFile().getName());
-
-        // Path menyimpan Hasil Output                     
-        String path = System.getProperty("user.dir") + "\\output\\" + file_name + "\\";
-        System.out.println("Output path: " + path);
-        refreshDir(path);
-        
-
-        drawtoLabelScaled(mask, lbl_img_mask, scale);
-
-        //Imgproc.blur(mask, blur, new Size(3,3));
-        Imgproc.medianBlur(mask, blur, 7);
-        //Imgproc.Canny( mask, canny, 100, 200);
-        Imgproc.Laplacian(mask, canny, 8);
-        kontur.clear();
-        Imgproc.findContours(canny, kontur, hirarki, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
-        System.out.println("kontur ditemukan :" + kontur.size());
-
-        //sorting kontur berdasar x dan y
-        Rect[] rect = new Rect[kontur.size()];
-        int[] temp_data = new int[kontur.size()];
-        for (int i = 0; i < kontur.size(); i++) {
-            rect[i] = Imgproc.boundingRect(kontur.get(i));
-            temp_data[i] = Integer.parseInt(rect[i].x + "" + rect[i].y);
-        }
-
-        //sort
-        int n = kontur.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (temp_data[j] > temp_data[j + 1]) {
-                    //swap data
-                    int temp = temp_data[j];
-                    temp_data[j] = temp_data[j + 1];
-                    temp_data[j + 1] = temp;
-
-                    //swap rect
-                    Rect temp2 = rect[j];
-
-                    rect[j] = rect[j + 1];
-                    rect[j + 1] = temp2;
-                }
-            }
-        }
-
-        //Mat drawing = Mat.zeros(canny.size(), CvType.CV_8UC3);
-
-        int pic_area = img_awal.width() * img_awal.height();
-        double limit_area = (Integer.parseInt(fieldArea.getText()) / 1000.0) * pic_area;
-        System.out.println("limit area :" + limit_area + ", pic area : " + pic_area);
-
-        double overlap = (Integer.parseInt(fieldOverlap.getText())) / 100.0;
-        System.out.println("overlap :" + overlap);
-        Rect prev = new Rect();
-
-        Scalar color = new Scalar(0, 255, 0);
-        // kontur pertama
-
-        //System.out.println("Kontur "+i+" : "+rect.br()+" , "+rect.);
-        //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
-        // indek untuk kontur yang ditemukan
-        // untuk penomoran file
-        int idx = 0;
-        val="";
-
-        if (rect[0].area() > (int) limit_area) {
-            //rect.
-            Imgproc.rectangle(dw, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
-            Imgproc.rectangle(oby, rect[0].br(), rect[0].tl(), color, 2, 8, 0);
-            System.out.println("kontur :" + 0 + " , x :" + rect[0].x + " , y :" + rect[0].y + " area :" + rect[0].area());
-
-            //crop
-            //print
-            //Proses Crop
-            Rect Crop0 = null;
-                    Crop0 = new Rect(rect[0].x, rect[0].y, rect[0].width, rect[0].height);
-                    Mat image_roi = new Mat(oby, Crop0);
-                    //Akhir Proses Crop
-
-                    // Proses save to gray
-                    Mat gray0 = image_roi.clone();
-                    Imgproc.cvtColor(image_roi, gray0, Imgproc.COLOR_BGR2GRAY);
-                    
-                    //untuk mengetes apakah gambar bisa di write
-                    if(!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray0))
-                        System.out.println("failed to write file");
-                        
-
-                    // Process Resize
-                    Mat rz0 = new Mat();
-                    Size sz0 = new Size(28, 28);
-                    Imgproc.resize(gray0, rz0, sz0);
-                    Imgcodecs.imwrite(path + "crop_gray_rz-" + idx + ".jpg", rz0);
-
-                    // {Process Save to the HELL
-                    //System.out.println(idx);
-                    Imgcodecs.imwrite(path + "crop-" + idx + ".jpg", image_roi);
-                    
-                    // Proses Blur
-                    Mat blur0 = new Mat();
-                    Imgproc.blur(rz0, blur0, new Size(3, 3));
-                    
-                    // Proses Canny
-                    Mat canny0 = new Mat();
-                    int tresh0 = 128;
-                    Imgproc.Canny(blur0, canny0, tresh0, tresh0*2);
-                    
-                    Moments moments0 = new Moments();
-                    moments0 = Imgproc.moments(canny0);
-                    
-                    
-            idx++;
-            System.out.println("Moment " + idx + " : = " + moments0.m00);
-            val=val+(int)moments0.m00+"/";
-
-        }
-        prev = rect[0];
-
-        //kontur kedua dst
-        for (int i = 1; i < rect.length; i++) {
-
-            //oby = img_awal.clone();
-            //Imgproc.drawContours(dw, kontur, i, color, 2, Core.LINE_8, hirarki, 0, new Point());
-            //if(kontur.get(i).height()<(dw.height()/10)&&kontur.get(i).width()<(dw.width()/10))
-            //System.out.println("Kontur "+i+" : "+rect.br()+" , "+rect.);
-            //System.out.println("kontur :" + i +" , x :"+rect.x +" , y :"+rect.y+" area :" + rect.area());
-            double overlap_x = prev.x + (prev.width * overlap);
-            double overlap_y = prev.y + (prev.height * overlap);
-
-            Rect rect_Crop = null;
-            if (rect[i].area() > (int) limit_area) {
-                if (rect[i].x >= (int) overlap_x || rect[i].y >= (int) overlap_y) {
-
-                    //System.out.println("ovx :"+(int)overlap_x+" ovy :"+(int)overlap_y);
-                    Imgproc.rectangle(dw, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
-                    Imgproc.rectangle(oby, rect[i].br(), rect[i].tl(), color, 2, 8, 0);
-                    System.out.println("kontur :" + i + " , x :" + rect[i].x + " , y :" + rect[i].y + " area :" + rect[i].area());
-
-                    //crop
-                    //Proses Crop
-                    rect_Crop = new Rect(rect[i].x, rect[i].y, rect[i].width, rect[i].height);
-                    Mat image_roi = new Mat(img_awal, rect_Crop);
-                    //Akhir Proses Crop
-
-                    // Proses save to gray
-                    Mat gray = image_roi.clone();
-                    Imgproc.cvtColor(image_roi, gray, Imgproc.COLOR_BGR2GRAY);
-
-                    //untuk mengetes apakah gambar bisa di write
-                    if (!Imgcodecs.imwrite(path + "crop_gray-" + idx + ".jpg", gray)) {
-                        System.out.println("failed to write file");
-                    }
-
-                    // Process Resize
-                    Mat rz = new Mat();
-                    Size sz = new Size(28, 28);
-                    Imgproc.resize(gray, rz, sz);
-                    Imgcodecs.imwrite(path + "crop_gray_rz-" + idx + ".jpg", rz);
-
-                    // {Process Save to the HELL
-                    
-                    Imgcodecs.imwrite(path + "crop-" + idx + ".jpg", image_roi);
-
-                    // Proses Blur
-                    Mat blur = new Mat();
-                    Imgproc.blur(rz, blur, new Size(3, 3));
-                    
-                    // Proses Canny
-                    Mat canny = new Mat();
-                    int tresh = 128;
-                    Imgproc.Canny(blur, canny, tresh, tresh*2);
-                    
-                    Moments moments = new Moments();
-                    moments = Imgproc.moments(canny);
-                    
-                    
-                    
-                    idx++;
-                    System.out.println(idx);
-                    System.out.println("Moment " + idx + " : = " + moments.m00);
-                    val=val+(int)moments.m00+"/";
-                }
-                 prev = rect[i];
-            }
-        }
-        val=val.substring(0, val.length()-1);
-        component = idx;
-        Imgcodecs.imwrite(path + "processed.jpg", dw);
-        drawtoLabelScaled(dw, lbl_img_other, scale);
-        x.drawtoLabelScaled(dw);
-    }
-
-    public BufferedImage toBufferedImage(Mat m) {
-        int type = BufferedImage.TYPE_BYTE_GRAY;
-        if (m.channels() > 1) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-        int bufferSize = m.channels() * m.cols() * m.rows();
-        byte[] b = new byte[bufferSize];
-        m.get(0, 0, b); // get all the pixels
-        BufferedImage image = new BufferedImage(m.cols(), m.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(b, 0, targetPixels, 0, b.length);
-        return image;
-    }
-
-    private void drawtoPanel(Mat image, javax.swing.JPanel panel) {
-        BufferedImage buff = toBufferedImage(image);
-
-        Graphics g1 = panel.getGraphics();
-
-        if (g1.drawImage(buff, 0, 0, buff.getWidth(), buff.getHeight(), 0, 0, buff.getWidth(), buff.getHeight(), null));
-    }
-
-    private void drawtoLabelScaled(Mat image, JLabel label, double scale) {
-        Mat imshow = image.clone();
-
-        Imgproc.resize(imshow, imshow, new Size(0, 0), scale, scale, Imgproc.INTER_LINEAR);
-        drawtoLabel(imshow, label);
-    }
-
-    private void drawtoLabel(Mat image, JLabel label) {
-        BufferedImage buff = toBufferedImage(image);
-        //ImageIcon icon = new ImageIcon();
-
-        label.setIcon(new ImageIcon(buff));
-
-    }
-
-    private void drawtoPanelScaled(Mat image, javax.swing.JPanel panel, double h_scale) {
-        Mat imshow = image.clone();
-        Imgproc.resize(imshow, imshow, new Size(0, 0), h_scale, h_scale, Imgproc.INTER_LINEAR);
-        drawtoPanel(imshow, panel);
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1150,13 +872,13 @@ public class WindowTuning extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel labelMomentVal;
     private javax.swing.JLabel label_dataset_component;
     private javax.swing.JLabel label_dataset_image;
     private javax.swing.JLabel label_name;

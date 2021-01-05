@@ -5,9 +5,13 @@
  */
 package main;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.event.ListDataListener;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -27,7 +31,7 @@ public class Extend extends javax.swing.JFrame {
         
     }
     
-    public void drawToLabelScaled(Mat image) {
+    public void drawtoLabelScaled(Mat image) {
         Mat imshow = image.clone();
         double h_scale,w_scale,scale;
         h_scale = (lbl_pic.getHeight()) / (image.size().height);
@@ -44,7 +48,7 @@ public class Extend extends javax.swing.JFrame {
 
     public void drawtoLabel(Mat image) {
         BufferedImage buff = toBufferedImage(image);
-       // ImageIcon icon = new ImageIcon();
+        ImageIcon icon = new ImageIcon();
 
         lbl_pic.setIcon(new ImageIcon(buff));
 

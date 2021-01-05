@@ -5,7 +5,6 @@
  */
 package main;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import javax.swing.ImageIcon;
@@ -19,7 +18,7 @@ import org.opencv.imgproc.Imgproc;
  * @author Yogha Pradana
  */
 public class Draw {
-    public static void drawToLabelScaled(Mat image, JLabel label) {
+    public static void drawtoLabelScaled(Mat image, JLabel label) {
         Mat imshow = image.clone();
         double h_scale,w_scale,scale;
         h_scale = (label.getHeight()) / (image.size().height);
@@ -31,11 +30,11 @@ public class Draw {
                 scale = w_scale;
             }
         Imgproc.resize(imshow, imshow, new Size(0, 0), scale, scale, Imgproc.INTER_LINEAR);
-        drawToLabel(imshow,label);
+        drawtoLabel(imshow,label);
         
     }
     
-    public static void drawToLabel(Mat image, JLabel label) {
+    public static void drawtoLabel(Mat image, JLabel label) {
         BufferedImage buff = toBufferedImage(image);
         //ImageIcon icon = new ImageIcon();
 
@@ -55,19 +54,5 @@ public class Draw {
         final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         System.arraycopy(b, 0, targetPixels, 0, b.length);
         return image;
-    }
-    
-    public static void drawToPanel(Mat image, javax.swing.JPanel panel) {
-        BufferedImage buff = toBufferedImage(image);
-
-        Graphics g1 = panel.getGraphics();
-
-        if (g1.drawImage(buff, 0, 0, buff.getWidth(), buff.getHeight(), 0, 0, buff.getWidth(), buff.getHeight(), null));
-    }
-    
-    private void drawToPanelScaled(Mat image, javax.swing.JPanel panel, double h_scale) {
-        Mat imshow = image.clone();
-        Imgproc.resize(imshow, imshow, new Size(0, 0), h_scale, h_scale, Imgproc.INTER_LINEAR);
-        drawToPanel(imshow, panel);
     }
 }
